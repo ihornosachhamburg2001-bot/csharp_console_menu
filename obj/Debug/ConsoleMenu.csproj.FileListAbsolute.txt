@@ -1,0 +1,7 @@
+D:\Projects\ConsoleMenu\ConsoleMenu\bin\Debug\ConsoleMenu.exe.config
+D:\Projects\ConsoleMenu\ConsoleMenu\bin\Debug\ConsoleMenu.exe
+D:\Projects\ConsoleMenu\ConsoleMenu\bin\Debug\ConsoleMenu.pdb
+D:\Projects\ConsoleMenu\ConsoleMenu\obj\Debug\ConsoleMenu.csproj.AssemblyReference.cache
+D:\Projects\ConsoleMenu\ConsoleMenu\obj\Debug\ConsoleMenu.csproj.CoreCompileInputs.cache
+D:\Projects\ConsoleMenu\ConsoleMenu\obj\Debug\ConsoleMenu.exe
+D:\Projects\ConsoleMenu\ConsoleMenu\obj\Debug\ConsoleMenu.pdb
