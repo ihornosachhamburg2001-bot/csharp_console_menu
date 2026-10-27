@@ -1,43 +1,97 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ConsoleMenu
 {
     internal class Program
     {
+        enum MenuOption
+        {
+            Start,
+            Settings,
+            Exit
+        }
+
+        static void DrawMenu(int selectedIndex, string[] menuItems)
+        {
+            Console.WriteLine("MAIN MENU");
+
+            for (int i = 0; i < menuItems.Length; i++)
+            {
+                if (i == selectedIndex)
+                {
+                    Console.WriteLine("> " + menuItems[i]);
+                }
+                else { Console.WriteLine("  " + menuItems[i]); }
+            }
+        }
+
+        static void Start()
+        {
+            Console.Clear();
+            Console.WriteLine("Starting...");
+            ConsoleKeyInfo consoleKeyInfo;
+            Console.WriteLine("Press Escape to return in Menu.");
+            do
+            {
+                consoleKeyInfo = Console.ReadKey(true);
+            }
+            while (consoleKeyInfo.Key != ConsoleKey.Escape);                
+        }
+
+        static void OpenSettings()
+        {       
+            Console.Clear();
+            Console.WriteLine("Open settings...");
+            ConsoleKeyInfo consoleKeyInfo;
+            Console.WriteLine("Press Escape to return in Menu.");
+            do
+            {
+                consoleKeyInfo = Console.ReadKey(true);
+            }
+            while (consoleKeyInfo.Key != ConsoleKey.Escape);
+        }
+
         static void Main(string[] args)
-        {           
+        {
+            string[] menuItems = { "Start", "Settings", "Exit" };
+            
+            int selectedIndex = 0;
+            int firstElementOfItems = 0;
+
             while (true)
             {
                 Console.Clear();
-                Console.WriteLine("\tMenu \n");
-                Console.WriteLine("1. Start\n2. Settings\n3. Exit");
-                Console.Write("Enter a number: ");
 
-                string input = Console.ReadLine();
-                bool result = int.TryParse(input, out int selectedNumber);
-                
-                if (result == true)
+                DrawMenu(selectedIndex, menuItems);
+
+                ConsoleKeyInfo consoleKeyInfo = Console.ReadKey(true);
+
+                if (consoleKeyInfo.Key == ConsoleKey.UpArrow
+                    && selectedIndex > firstElementOfItems)
                 {
-                    switch (selectedNumber)
+                    selectedIndex--;                   
+                }
+                else if (consoleKeyInfo.Key == ConsoleKey.DownArrow
+                    && selectedIndex < (menuItems.Length - 1))
+                {
+                    selectedIndex++;                    
+                }
+
+                if(consoleKeyInfo.Key == ConsoleKey.Enter)
+                {
+                    switch (selectedIndex)
                     {
-                        case 1:
-                            Console.WriteLine("You selected 1.");
+                        case (int)MenuOption.Start:                           
+                            Start();                         
                             break;
-                        case 2:
-                            Console.WriteLine("You selected 2.");
+                        case (int)MenuOption.Settings:
+                            OpenSettings();
                             break;
-                        case 3:
-                            return;
-                        default:
-                            Console.WriteLine("Wrong number!");
-                            break;
+                        case (int)MenuOption.Exit:
+                            return;                     
                     }
                 }
-            }
+            }     
         }
     }
 }
