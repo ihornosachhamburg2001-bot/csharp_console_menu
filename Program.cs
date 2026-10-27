@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace ConsoleMenu
 {
@@ -11,17 +12,25 @@ namespace ConsoleMenu
             Exit
         }
 
-        static void DrawMenu(int selectedIndex, string[] menuItems)
+        static void DrawMenu(MenuOption selectedOption, 
+            Dictionary<MenuOption, string> menuItems,
+            MenuOption[] menuOrder)
         {
             Console.WriteLine("MAIN MENU");
 
-            for (int i = 0; i < menuItems.Length; i++)
+            foreach(var option in menuOrder)
             {
-                if (i == selectedIndex)
+                if (option == selectedOption)
                 {
-                    Console.WriteLine("> " + menuItems[i]);
+                    Console.ForegroundColor = ConsoleColor.Green;
+                    Console.WriteLine("> " + menuItems[option]);
                 }
-                else { Console.WriteLine("  " + menuItems[i]); }
+                else 
+                {
+                    Console.ForegroundColor = ConsoleColor.White;
+                    Console.WriteLine("  " + menuItems[option]);                  
+                }
+                Console.ResetColor();
             }
         }
 
@@ -51,43 +60,76 @@ namespace ConsoleMenu
             while (consoleKeyInfo.Key != ConsoleKey.Escape);
         }
 
+        static MenuOption NavigateMenu(MenuOption selectedOption, ConsoleKey key)
+        {
+            if (key == ConsoleKey.DownArrow)
+            {
+                switch (selectedOption)
+                {
+                    case MenuOption.Start:
+                        selectedOption = MenuOption.Settings;
+                        break;
+
+                    case MenuOption.Settings:
+                        selectedOption = MenuOption.Exit;
+                        break;
+                }
+            }
+
+            if (key == ConsoleKey.UpArrow)
+            {
+                switch (selectedOption)
+                {
+                    case MenuOption.Exit:
+                        selectedOption = MenuOption.Settings;
+                        break;
+                    case MenuOption.Settings:
+                        selectedOption = MenuOption.Start;
+                        break;
+                }
+            }
+
+            return selectedOption;
+        }
+
         static void Main(string[] args)
         {
-            string[] menuItems = { "Start", "Settings", "Exit" };
-            
-            int selectedIndex = 0;
-            int firstElementOfItems = 0;
+            MenuOption[] menuOrder =
+            {
+                MenuOption.Start,
+                MenuOption.Settings,
+                MenuOption.Exit
+            };
+
+            Dictionary<MenuOption, string> menuItems = new Dictionary<MenuOption, string>();
+
+            menuItems.Add(MenuOption.Start, "Start");
+            menuItems.Add(MenuOption.Settings, "Settings");
+            menuItems.Add(MenuOption.Exit, "Exit");
+
+            MenuOption selectedOption = MenuOption.Start;
 
             while (true)
             {
                 Console.Clear();
 
-                DrawMenu(selectedIndex, menuItems);
+                DrawMenu(selectedOption, menuItems, menuOrder);
 
                 ConsoleKeyInfo consoleKeyInfo = Console.ReadKey(true);
 
-                if (consoleKeyInfo.Key == ConsoleKey.UpArrow
-                    && selectedIndex > firstElementOfItems)
-                {
-                    selectedIndex--;                   
-                }
-                else if (consoleKeyInfo.Key == ConsoleKey.DownArrow
-                    && selectedIndex < (menuItems.Length - 1))
-                {
-                    selectedIndex++;                    
-                }
+                selectedOption = NavigateMenu(selectedOption, consoleKeyInfo.Key);
 
-                if(consoleKeyInfo.Key == ConsoleKey.Enter)
+                if (consoleKeyInfo.Key == ConsoleKey.Enter)
                 {
-                    switch (selectedIndex)
+                    switch (selectedOption)
                     {
-                        case (int)MenuOption.Start:                           
+                        case MenuOption.Start:                           
                             Start();                         
                             break;
-                        case (int)MenuOption.Settings:
+                        case MenuOption.Settings:
                             OpenSettings();
                             break;
-                        case (int)MenuOption.Exit:
+                        case MenuOption.Exit:
                             return;                     
                     }
                 }
